@@ -2,6 +2,8 @@ package com.integrationlayer.pruebaApi.controller;
 
 import com.integrationlayer.pruebaApi.model.Person;
 import com.integrationlayer.pruebaApi.service.PersonService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/persons")
 public class PersonController {
 
@@ -23,6 +26,12 @@ public class PersonController {
 
     public PersonController(PersonService personService) {
         this.personService = personService;
+    }
+
+    @GetMapping("/saludo")
+    @Operation(summary = "Saludo", description = "Imprimir un saludo")
+    public String saludo() {
+        return "Prueba Docker Spring Boot";
     }
 
     @GetMapping
@@ -41,7 +50,9 @@ public class PersonController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Person> getPersonById(@PathVariable Integer id) {
+    public ResponseEntity<Person> getPersonById(
+            @PathVariable
+            @Parameter(name="id", description = "id person search", example = "3") Integer id) {
         Optional<Person> personOptional = personService.findById(id);
 
         return personOptional.map(person -> ResponseEntity.ok(person))

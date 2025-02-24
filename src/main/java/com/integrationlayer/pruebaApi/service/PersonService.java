@@ -11,18 +11,49 @@ import java.util.Optional;
 public class PersonService {
     @Autowired
     private IPersonDAO personDAO;
-    public Person save(Person t) {
-        return personDAO.save(t);
+
+    /**
+     * Saves a Person entity.
+     *
+     * @param person The Person entity to save.
+     * @return The saved Person entity.
+     */
+    public Person save(Person person) {
+        return personDAO.save(person);
     }
-    public Person update(Person t) {
-        return personDAO.save(t);
+
+    /**
+     * Update a Person entity.
+     * @param person The person entity to update.
+     * @return The updated Person entity.
+     */
+    public Person update(Person person) {
+        return personDAO.save(person);
     }
-    public void delete(Person t) {
-        personDAO.delete(t);
+
+    /**
+     * Delete a Person entity.
+     * @param person The person entity to delete.
+     */
+    public void delete(Person person) {
+        personDAO.delete(person);
     }
+
+    /**
+     * Retrieves a list of all persons.
+     *
+     * @return An Iterable containing all Person entities.
+     */
     public Iterable<Person> list() {
         return personDAO.findAll();
     }
+
+    /**
+     * Finds a person by their ID.
+     *
+     * @param id The ID of the person to find.
+     * @return An Optional containing the Person entity if found, or an empty Optional if not found.
+     */
     public Optional<Person> findById(Integer id) {
         return personDAO.findById(id);
     }
