@@ -4,6 +4,7 @@ import com.integrationlayer.pruebaApi.model.Person;
 import com.integrationlayer.pruebaApi.service.PersonService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class PersonController {
     @GetMapping("/saludo")
     @Operation(summary = "Saludo", description = "Imprimir un saludo")
     public String saludo() {
+        logger.info("Saludo");
         return "Prueba Docker Spring Boot";
     }
 
@@ -60,7 +62,14 @@ public class PersonController {
     }
 
     @PostMapping
-    public Person createPerson(@RequestBody Person person) {
-        return personService.save(person);
+    public ResponseEntity<?> createPerson(@Valid @RequestBody Person person) {
+        try {
+            Person savedPerson = personService.save(person);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedPerson);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno: " + e.getMessage());
+        }
     }
 }

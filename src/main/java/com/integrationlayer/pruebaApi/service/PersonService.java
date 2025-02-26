@@ -2,15 +2,18 @@ package com.integrationlayer.pruebaApi.service;
 
 import com.integrationlayer.pruebaApi.dao.IPersonDAO;
 import com.integrationlayer.pruebaApi.model.Person;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
 @Service
 public class PersonService {
-    @Autowired
-    private IPersonDAO personDAO;
+
+    private final IPersonDAO personDAO;
 
     /**
      * Saves a Person entity.
@@ -19,8 +22,12 @@ public class PersonService {
      * @return The saved Person entity.
      */
     public Person save(Person person) {
+        if (person == null) {
+            throw new IllegalArgumentException("La persona no puede ser nula");
+        }
         return personDAO.save(person);
     }
+
 
     /**
      * Update a Person entity.
